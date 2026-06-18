@@ -1,0 +1,11 @@
+(function(){
+function ready(fn){document.readyState!=="loading"?fn():document.addEventListener("DOMContentLoaded",fn)}
+ready(function(){
+var toggle=document.querySelector(".nav-toggle");var nav=document.querySelector(".main-nav");if(toggle&&nav){toggle.addEventListener("click",function(){nav.classList.toggle("open")})}
+var hero=document.querySelector("[data-hero]");if(hero){var slides=[].slice.call(hero.querySelectorAll(".hero-slide"));var dots=[].slice.call(hero.querySelectorAll(".hero-dot"));var index=0;function show(n){index=(n+slides.length)%slides.length;slides.forEach(function(s,i){s.classList.toggle("active",i===index)});dots.forEach(function(d,i){d.classList.toggle("active",i===index)})}dots.forEach(function(d){d.addEventListener("click",function(){show(parseInt(d.getAttribute("data-slide"),10)||0)})});setInterval(function(){show(index+1)},5200)}
+var params=new URLSearchParams(location.search);var q=params.get("q")||"";var searchInput=document.querySelector(".inline-filter");if(searchInput&&q){searchInput.value=q}
+var cards=[].slice.call(document.querySelectorAll(".movie-card"));var rows=[].slice.call(document.querySelectorAll(".rank-row"));var allItems=cards.concat(rows);var empty=document.querySelector(".empty-state");function itemText(el){return ((el.getAttribute("data-haystack")||el.textContent||"")+" "+(el.getAttribute("data-type")||"")+" "+(el.getAttribute("data-year")||"")).toLowerCase()}function apply(){var filterBtn=document.querySelector(".filter-btn.active");var filter=filterBtn?filterBtn.getAttribute("data-filter"):"all";var term=(searchInput?searchInput.value:q).trim().toLowerCase();var shown=0;allItems.forEach(function(el){var text=itemText(el);var passText=!term||text.indexOf(term)>-1;var passFilter=filter==="all"||text.indexOf(filter.toLowerCase())>-1;var ok=passText&&passFilter;el.classList.toggle("hidden-card",!ok);if(ok)shown++});if(empty){empty.style.display=shown?"none":"block"}}
+if(allItems.length){apply()}
+if(searchInput){searchInput.addEventListener("input",apply)}document.querySelectorAll(".filter-btn").forEach(function(btn){btn.addEventListener("click",function(){document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active")});btn.classList.add("active");apply()})})
+})
+})();
